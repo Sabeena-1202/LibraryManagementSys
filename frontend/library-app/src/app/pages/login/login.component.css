@@ -1,0 +1,39 @@
+/* Login page styles */
+.login-page {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 40px 0;
+}
+
+/* Login card */
+.login-card {
+  border-radius: 15px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: none;
+}
+
+/* Login icon */
+.login-icon {
+  font-size: 3rem;
+  color: #343a40;
+}
+
+/* Input focus */
+.form-control:focus {
+  border-color: #343a40;
+  box-shadow: 0 0 0 0.2rem rgba(52, 58, 64, 0.25);
+}
+
+/* Login button */
+.btn-dark:hover {
+  background-color: #1a1a2e;
+  transform: translateY(-1px);
+  transition: all 0.2s;
+}
+
+/* Min height */
+.min-vh-80 {
+  min-height: 80vh;
+}

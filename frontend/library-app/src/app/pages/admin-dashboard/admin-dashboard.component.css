@@ -1,0 +1,45 @@
+/* Admin dashboard */
+.admin-dashboard {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+/* Stat cards */
+.stat-card {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+}
+
+/* Stat icon */
+.stat-icon {
+  width: 55px;
+  height: 55px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+/* Nav tabs */
+.nav-tabs .nav-link {
+  color: #495057;
+  font-weight: 500;
+}
+
+.nav-tabs .nav-link.active {
+  color: #343a40;
+  font-weight: 700;
+  border-bottom: 3px solid #343a40;
+}
+
+/* Table */
+.table th {
+  font-weight: 600;
+}

@@ -1,0 +1,360 @@
+<!-- Admin Dashboard -->
+<div class="admin-dashboard">
+  <div class="container py-4">
+
+    <!-- Header -->
+    <div class="row mb-4">
+      <div class="col">
+        <h2 class="fw-bold">
+          <i class="bi bi-gear me-2"></i>
+          Admin Dashboard
+        </h2>
+        <p class="text-muted">Welcome, {{ adminName }}!</p>
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-4">
+
+      <!-- Total Books -->
+      <div class="col-md-3">
+        <div class="card stat-card">
+          <div class="card-body d-flex align-items-center">
+            <div class="stat-icon bg-dark text-white me-3">
+              <i class="bi bi-book"></i>
+            </div>
+            <div>
+              <h6 class="text-muted mb-0">Total Books</h6>
+              <h3 class="fw-bold mb-0">{{ totalBooks }}</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Available Books -->
+      <div class="col-md-3">
+        <div class="card stat-card">
+          <div class="card-body d-flex align-items-center">
+            <div class="stat-icon bg-success text-white me-3">
+              <i class="bi bi-check-circle"></i>
+            </div>
+            <div>
+              <h6 class="text-muted mb-0">Available</h6>
+              <h3 class="fw-bold mb-0">{{ availableBooks }}</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Borrowed Books -->
+      <div class="col-md-3">
+        <div class="card stat-card">
+          <div class="card-body d-flex align-items-center">
+            <div class="stat-icon bg-warning text-dark me-3">
+              <i class="bi bi-hourglass-split"></i>
+            </div>
+            <div>
+              <h6 class="text-muted mb-0">Borrowed</h6>
+              <h3 class="fw-bold mb-0">{{ borrowedBooks }}</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Borrow Records -->
+      <div class="col-md-3">
+        <div class="card stat-card">
+          <div class="card-body d-flex align-items-center">
+            <div class="stat-icon bg-info text-white me-3">
+              <i class="bi bi-clock-history"></i>
+            </div>
+            <div>
+              <h6 class="text-muted mb-0">Total Records</h6>
+              <h3 class="fw-bold mb-0">{{ totalBorrowRecords }}</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Alerts -->
+    <div class="alert alert-danger" *ngIf="errorMessage">
+      <i class="bi bi-x-circle me-2"></i>{{ errorMessage }}
+    </div>
+    <div class="alert alert-success" *ngIf="successMessage">
+      <i class="bi bi-check-circle me-2"></i>{{ successMessage }}
+    </div>
+
+    <!-- Edit Book Form -->
+    <div class="card mb-4" *ngIf="isEditing">
+      <div class="card-header bg-warning text-dark">
+        <h5 class="mb-0">
+          <i class="bi bi-pencil me-2"></i>Edit Book
+        </h5>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Title</label>
+            <input type="text" class="form-control"
+              [(ngModel)]="editBook.title">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Author</label>
+            <input type="text" class="form-control"
+              [(ngModel)]="editBook.author">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Category</label>
+            <input type="text" class="form-control"
+              [(ngModel)]="editBook.category">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Published Year</label>
+            <input type="number" class="form-control"
+              [(ngModel)]="editBook.publishedYear">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Status</label>
+            <select class="form-select"
+              [(ngModel)]="editBook.availabilityStatus">
+              <option value="Available">Available</option>
+              <option value="Borrowed">Borrowed</option>
+            </select>
+          </div>
+          <div class="col-12">
+            <button class="btn btn-warning me-2"
+              [disabled]="isSubmitting"
+              (click)="updateBook()">
+              <i class="bi bi-check-circle me-2"></i>
+              {{ isSubmitting ? 'Updating...' : 'Update Book' }}
+            </button>
+            <button class="btn btn-outline-secondary"
+              (click)="cancelEdit()">
+              <i class="bi bi-x-circle me-2"></i>Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <ul class="nav nav-tabs mb-4">
+      <li class="nav-item">
+        <button class="nav-link"
+          [ngClass]="{'active': activeTab === 'books'}"
+          (click)="setActiveTab('books')">
+          <i class="bi bi-book me-2"></i>Manage Books
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link"
+          [ngClass]="{'active': activeTab === 'add'}"
+          (click)="setActiveTab('add')">
+          <i class="bi bi-plus-circle me-2"></i>Add Book
+        </button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link"
+          [ngClass]="{'active': activeTab === 'records'}"
+          (click)="setActiveTab('records')">
+          <i class="bi bi-clock-history me-2"></i>Borrow Records
+        </button>
+      </li>
+    </ul>
+
+    <!-- Tab: Manage Books -->
+    <div *ngIf="activeTab === 'books'">
+      <div class="card">
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0">
+            <i class="bi bi-book me-2"></i>All Books
+          </h5>
+        </div>
+        <div class="card-body p-0">
+
+          <!-- Loading -->
+          <div class="text-center py-4" *ngIf="isLoading">
+            <div class="spinner-border text-dark"></div>
+          </div>
+
+          <!-- No Books -->
+          <div class="text-center py-4"
+            *ngIf="!isLoading && books.length === 0">
+            <i class="bi bi-book-x display-4 text-muted"></i>
+            <p class="mt-2 text-muted">No books found</p>
+          </div>
+
+          <!-- Books Table -->
+          <div class="table-responsive"
+            *ngIf="!isLoading && books.length > 0">
+            <table class="table table-hover mb-0">
+              <thead class="table-dark">
+                <tr>
+                  <th>#</th>
+                  <th>Title</th>
+                  <th>Author</th>
+                  <th>Category</th>
+                  <th>Year</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let book of books; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td class="fw-semibold">{{ book.title }}</td>
+                  <td>{{ book.author }}</td>
+                  <td>{{ book.category }}</td>
+                  <td>{{ book.publishedYear }}</td>
+                  <td>
+                    <span class="badge"
+                      [ngClass]="getStatusBadge(book.availabilityStatus)">
+                      {{ book.availabilityStatus }}
+                    </span>
+                  </td>
+                  <td>
+                    <!-- Edit Button -->
+                    <button
+                      class="btn btn-sm btn-warning me-2"
+                      (click)="setEditBook(book)">
+                      <i class="bi bi-pencil"></i>
+                    </button>
+                    <!-- Delete Button -->
+                    <button
+                      class="btn btn-sm btn-danger"
+                      (click)="deleteBook(book.bookId, book.title)">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Add Book -->
+    <div *ngIf="activeTab === 'add'">
+      <div class="card">
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0">
+            <i class="bi bi-plus-circle me-2"></i>Add New Book
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">
+                <i class="bi bi-book me-1"></i>Title
+              </label>
+              <input type="text" class="form-control"
+                placeholder="Enter book title"
+                [(ngModel)]="newBook.title">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">
+                <i class="bi bi-person me-1"></i>Author
+              </label>
+              <input type="text" class="form-control"
+                placeholder="Enter author name"
+                [(ngModel)]="newBook.author">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">
+                <i class="bi bi-tag me-1"></i>Category
+              </label>
+              <input type="text" class="form-control"
+                placeholder="e.g. Fiction, Science"
+                [(ngModel)]="newBook.category">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">
+                <i class="bi bi-calendar me-1"></i>Published Year
+              </label>
+              <input type="number" class="form-control"
+                placeholder="e.g. 2024"
+                [(ngModel)]="newBook.publishedYear">
+            </div>
+            <div class="col-12">
+              <button class="btn btn-dark px-4"
+                [disabled]="isSubmitting"
+                (click)="addBook()">
+                <span *ngIf="isSubmitting">
+                  <span class="spinner-border
+                    spinner-border-sm me-2"></span>
+                  Adding...
+                </span>
+                <span *ngIf="!isSubmitting">
+                  <i class="bi bi-plus-circle me-2"></i>Add Book
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Borrow Records -->
+    <div *ngIf="activeTab === 'records'">
+      <div class="card">
+        <div class="card-header bg-dark text-white">
+          <h5 class="mb-0">
+            <i class="bi bi-clock-history me-2"></i>
+            All Borrow Records
+          </h5>
+        </div>
+        <div class="card-body p-0">
+
+          <!-- No Records -->
+          <div class="text-center py-4"
+            *ngIf="borrowRecords.length === 0">
+            <i class="bi bi-inbox display-4 text-muted"></i>
+            <p class="mt-2 text-muted">No borrow records found</p>
+          </div>
+
+          <!-- Records Table -->
+          <div class="table-responsive"
+            *ngIf="borrowRecords.length > 0">
+            <table class="table table-hover mb-0">
+              <thead class="table-dark">
+                <tr>
+                  <th>#</th>
+                  <th>Book</th>
+                  <th>User</th>
+                  <th>Borrow Date</th>
+                  <th>Return Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let record of borrowRecords; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td class="fw-semibold">{{ record.bookTitle }}</td>
+                  <td>{{ record.userName }}</td>
+                  <td>{{ record.borrowDate | date: 'dd/MM/yyyy' }}</td>
+                  <td>
+                    {{ record.returnDate
+                      ? (record.returnDate | date: 'dd/MM/yyyy')
+                      : '—' }}
+                  </td>
+                  <td>
+                    <span class="badge"
+                      [ngClass]="getBorrowBadge(record.status)">
+                      {{ record.status }}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,161 @@
+<!-- Borrow Book Page -->
+<div class="borrow-page">
+  <div class="container py-4">
+
+    <!-- Back Button -->
+    <button class="btn btn-outline-dark mb-4" (click)="goBack()">
+      <i class="bi bi-arrow-left me-2"></i>Back to Books
+    </button>
+
+    <!-- Error Alert -->
+    <div class="alert alert-danger" *ngIf="errorMessage">
+      <i class="bi bi-x-circle me-2"></i>{{ errorMessage }}
+    </div>
+
+    <!-- Success Alert -->
+    <div class="alert alert-success" *ngIf="successMessage">
+      <i class="bi bi-check-circle me-2"></i>{{ successMessage }}
+    </div>
+
+    <!-- Loading -->
+    <div class="text-center py-5" *ngIf="isLoading">
+      <div class="spinner-border text-dark"></div>
+      <p class="mt-2 text-muted">Loading book details...</p>
+    </div>
+
+    <div class="row g-4" *ngIf="!isLoading">
+
+      <!-- Book Details Card -->
+      <div class="col-md-5" *ngIf="selectedBook">
+        <div class="card book-detail-card">
+          <div class="card-body p-4">
+
+            <!-- Book Icon -->
+            <div class="text-center mb-4">
+              <div class="book-icon-wrapper mx-auto">
+                <i class="bi bi-book-fill book-icon"></i>
+              </div>
+            </div>
+
+            <!-- Book Info -->
+            <h4 class="fw-bold text-center mb-4">
+              {{ selectedBook.title }}
+            </h4>
+
+            <ul class="list-group list-group-flush mb-4">
+              <li class="list-group-item d-flex justify-content-between">
+                <span class="text-muted">
+                  <i class="bi bi-person me-2"></i>Author
+                </span>
+                <span class="fw-semibold">{{ selectedBook.author }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span class="text-muted">
+                  <i class="bi bi-tag me-2"></i>Category
+                </span>
+                <span class="fw-semibold">{{ selectedBook.category }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span class="text-muted">
+                  <i class="bi bi-calendar me-2"></i>Published
+                </span>
+                <span class="fw-semibold">{{ selectedBook.publishedYear }}</span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span class="text-muted">
+                  <i class="bi bi-circle-fill me-2"></i>Status
+                </span>
+                <span class="badge"
+                  [ngClass]="selectedBook.availabilityStatus === 'Available'
+                    ? 'bg-success' : 'bg-danger'">
+                  {{ selectedBook.availabilityStatus }}
+                </span>
+              </li>
+            </ul>
+
+            <!-- Borrow Button -->
+            <button
+              class="btn btn-dark w-100 py-2"
+              [disabled]="selectedBook.availabilityStatus !== 'Available'
+                || isBorrowing"
+              (click)="borrowBook()">
+              <span *ngIf="isBorrowing">
+                <span class="spinner-border spinner-border-sm me-2"></span>
+                Borrowing...
+              </span>
+              <span *ngIf="!isBorrowing">
+                <i class="bi bi-download me-2"></i>
+                {{ selectedBook.availabilityStatus === 'Available'
+                  ? 'Borrow This Book' : 'Not Available' }}
+              </span>
+            </button>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Borrow History -->
+      <div class="col-md-7">
+        <div class="card">
+          <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">
+              <i class="bi bi-clock-history me-2"></i>
+              My Borrow History
+            </h5>
+          </div>
+          <div class="card-body p-0">
+
+            <!-- No History -->
+            <div class="text-center py-5"
+              *ngIf="borrowHistory.length === 0">
+              <i class="bi bi-inbox display-4 text-muted"></i>
+              <p class="mt-2 text-muted">No borrow history yet</p>
+            </div>
+
+            <!-- History Table -->
+            <div class="table-responsive" *ngIf="borrowHistory.length > 0">
+              <table class="table table-hover mb-0">
+                <thead class="table-dark">
+                  <tr>
+                    <th>Book</th>
+                    <th>Borrow Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let record of borrowHistory">
+                    <td>{{ record.bookTitle }}</td>
+                    <td>{{ record.borrowDate | date: 'dd/MM/yyyy' }}</td>
+                    <td>
+                      <span class="badge"
+                        [ngClass]="getStatusBadge(record.status)">
+                        {{ record.status }}
+                      </span>
+                    </td>
+                    <td>
+                      <button
+                        class="btn btn-sm btn-outline-dark"
+                        *ngIf="record.status === 'Borrowed'"
+                        [disabled]="isReturning"
+                        (click)="returnBook(record.bookId)">
+                        <i class="bi bi-upload me-1"></i>Return
+                      </button>
+                      <span class="text-muted"
+                        *ngIf="record.status === 'Returned'">
+                        Returned
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>

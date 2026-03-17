@@ -1,0 +1,33 @@
+/* Borrow page */
+.borrow-page {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+/* Book detail card */
+.book-detail-card {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Book icon */
+.book-icon-wrapper {
+  background-color: #f0f0f0;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.book-icon {
+  font-size: 2.5rem;
+  color: #343a40;
+}
+
+/* Table */
+.table th {
+  font-weight: 600;
+}

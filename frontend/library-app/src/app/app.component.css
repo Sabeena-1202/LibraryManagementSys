@@ -1,0 +1,13 @@
+/* Main app wrapper */
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Main content takes remaining space */
+.main-content {
+  flex: 1;
+  background-color: #f8f9fa;
+  padding: 20px 0;
+}

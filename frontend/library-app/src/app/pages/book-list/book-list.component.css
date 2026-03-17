@@ -1,0 +1,37 @@
+/* Book list page */
+.book-list-page {
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+/* Book card */
+.book-card {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.book-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Book icon wrapper */
+.book-icon-wrapper {
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  padding: 10px;
+  display: inline-block;
+}
+
+/* Book icon */
+.book-icon {
+  font-size: 1.8rem;
+  color: #343a40;
+}
+
+/* Search input */
+.input-group-text {
+  border-radius: 6px 0 0 6px;
+}
